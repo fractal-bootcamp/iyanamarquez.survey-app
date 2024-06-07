@@ -7,9 +7,21 @@ async function main() {
   //   data: { title: "Second Survey" },
   // });
   // console.log(allQuestions);
+  // Add new question
+  // const addQuestionToSurvey = await prisma.survey.update({
+  //   where: {
+  //     id: 27,
+  //   },
+  //   data: {
+  //     questions: {
+  //       create: [{ questions: "why catssssss?" }],
+  //     },
+  //   },
+  // });
+  // console.log(addQuestionToSurvey);
   // View all questions
-  // const allQuestions = await prisma.survey.findMany();
-  // console.log(allQuestions);
+  const allQuestions = await prisma.question.findMany();
+  console.log(allQuestions);
 }
 
 main()
