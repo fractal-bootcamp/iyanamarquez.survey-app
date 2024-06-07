@@ -1,27 +1,20 @@
 import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
 import { Form, json, NavLink, redirect, useActionData, useLoaderData, useNavigate } from "@remix-run/react";
 import Header from "~/components/Header";
-
-import { PrismaClient } from "@prisma/client";
-import { deleteSurvey } from "..";
-
-const prisma = new PrismaClient();
-
+import { deleteSurvey, getAllSurveys } from "..";
+import { useState } from "react";
 
 export async function action({
     request,
 }: ActionFunctionArgs) {
-
-
     const requestBody = await request.formData();
     const intent = requestBody.get('intent')
     const requestId = Number(requestBody.get('id'))
-    // Delete Survey
+    // Delete
     const runDeleteSurvey = async (requestId: number) => {
         await deleteSurvey(requestId)
 
     }
-
     switch (intent) {
         case "update": console.log('update logic'); break;
         case "delete": runDeleteSurvey(requestId); break;
@@ -32,16 +25,14 @@ export async function action({
 }
 
 export async function loader() {
-    const allSurveys = await prisma.survey.findMany();
+    const allSurveys = await getAllSurveys()
     return allSurveys
 }
 
-
-
 export default function SurveyList() {
     const dataAction = useActionData<typeof action>();
-
     const data = useLoaderData<typeof loader>();
+
 
     return (
         <>
@@ -51,7 +42,7 @@ export default function SurveyList() {
                 {data.map((x) => {
                     return <div key={x.id}>
                         <Form method="post" reloadDocument>
-                            <NavLink to={`/example/${x.id}`}>
+                            <NavLink to={`/onesurvey/${x.id}`}>
                                 {x.title}
                             </NavLink>
                             <input type="hidden" name="id" value={x.id}></input>
