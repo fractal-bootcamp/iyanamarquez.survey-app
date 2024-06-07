@@ -3,7 +3,10 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  const allUsers = await prisma.survey.findMany();
+  const allSurveys = await prisma.survey.findMany();
+  console.log(allUsers);
+
+  const allQuestions = await prisma.question.findMany();
   console.log(allUsers);
 }
 
