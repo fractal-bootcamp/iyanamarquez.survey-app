@@ -1,5 +1,5 @@
 import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
-import { Form, json, useActionData } from "@remix-run/react";
+import { Form, json, redirect, useActionData } from "@remix-run/react";
 import Header from "~/components/Header";
 
 import { PrismaClient } from "@prisma/client";
@@ -10,21 +10,23 @@ const prisma = new PrismaClient();
 export async function action({
     request,
 }: ActionFunctionArgs) {
-    // console.log('log')
 
+    // Get all surveys
     const allSurveys = await prisma.survey.findMany();
-    // console.log(allSurveys);
-
-    // const allQuestions = await prisma.question.findMany();
-    // console.log(allQuestions);
 
     const requestBody = await request.formData();
-    // const fieldName = requestBody.get("surveyQuestion");
+    const surveyName = requestBody.get("surveyName");
     const surveyQuestion = requestBody.get("surveyQuestion");
+
 
     const createSurvey = await prisma.survey.create({
         data: {
-            title: surveyQuestion as string,
+            title: surveyName as string,
+            questions: {
+                create: [
+                    { questions: surveyQuestion as string }
+                ]
+            }
         },
     })
     createSurvey
@@ -36,21 +38,19 @@ export async function action({
 
 export default function SurveyPage() {
     const data = useActionData<typeof action>();
-    console.log('data:', data)
-
     return (
         <>
             <Header />
             <h1>Survey Form </h1>
             <Form method="post">
                 <label>
-                    Question
-                    <input type="text" name='surveyQuestion' />
+                    Survey Name
+                    <input type="text" name='surveyName' />
                 </label>
                 <br></br>
                 <label>
-                    Answer
-                    <input type="text" name='surveyAnswer' />
+                    Survey Question
+                    <input type="text" name='surveyQuestion' />
                 </label>
                 <br></br>
                 <button type="submit">Submit!</button>
