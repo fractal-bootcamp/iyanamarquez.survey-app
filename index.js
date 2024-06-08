@@ -22,6 +22,17 @@ async function main() {
   // View all questions
   const allQuestions = await prisma.question.findMany();
   console.log(allQuestions);
+
+  const newAnswer = await prisma.answer.create({
+    data: {
+      answer: "here another2 the answer to the question",
+      questionId: 31,
+    },
+  });
+  console.log(newAnswer);
+  const allAnswers = await prisma.answer.findMany();
+
+  console.log(allAnswers);
 }
 
 main()

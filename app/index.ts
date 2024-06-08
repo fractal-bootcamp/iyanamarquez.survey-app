@@ -51,3 +51,18 @@ export const createNewQuestionOnSurvey = async (
   });
   return createSurvey;
 };
+
+export const findQuestionsFromSurvey = async (surveyId: Number) => {
+  return await prisma.question.findMany({
+    where: {
+      surveyId: surveyId,
+    },
+  });
+};
+
+// export const postAnswersToQuestions = async(
+//     questionId: number,
+//     answers
+// ) =>{
+
+// }
