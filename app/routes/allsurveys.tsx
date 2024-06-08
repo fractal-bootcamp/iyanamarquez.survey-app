@@ -17,7 +17,7 @@ export async function action({
     }
     switch (intent) {
         case "update": console.log('update logic'); break;
-        case "delete": runDeleteSurvey(requestId); break;
+        case "delete": await runDeleteSurvey(requestId); break;
         default: throw new Error("Unexpected action");
     }
 
@@ -42,11 +42,11 @@ export default function SurveyList() {
                 {data.map((x) => {
                     return <div key={x.id}>
                         <Form method="post" reloadDocument>
-                            <NavLink to={`/onesurvey/${x.id}`}>
+                            <NavLink to={`/survey/${x.id}`}>
                                 {x.title}
                             </NavLink>
                             <input type="hidden" name="id" value={x.id}></input>
-                            <button type="submit" name="intent" value='update'>Update</button>
+                            {/* <button type="submit" name="intent" value='update'>Update</button> */}
                             <button type="submit" name="intent" value='delete'>Delete</button>
                         </Form>
                     </div>
